@@ -3,22 +3,21 @@
 #include <vector>
 using namespace std;
 
-// Ïðîòîòèï ôóíêöèè DlgProc.
+HWND hEditControl_Err;
+
 BOOL CALLBACK DlgProc(HWND, UINT, WPARAM, LPARAM);
 
-
+bool CheckFieldsCompletion();
+bool CheckingDateForCorrectness();
 
 int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrev, LPSTR lpszCmdLine, int nCmdShow)
 {
 
-	MSG msg;	// ñòðóêòóðà.
-				// ñîçäà¸ì ãëàâíîå îêíî ïðèëîæåíèÿ íà îñíîâå íåìîäàëüíîãî äèàëîãà
+	MSG msg;
 	HWND hDialog = CreateDialog(hInst, MAKEINTRESOURCE(IDD_DIALOG_Main), NULL, DlgProc);
-	// Îòîáðàæàåì îêíî	
 	ShowWindow(hDialog, nCmdShow);
 
 
-	//Çàïóñêàåì öèêë îáðàáîòêè ñîîáùåíèé
 	while (GetMessage(&msg, 0, 0, 0))
 	{
 		TranslateMessage(&msg);
@@ -37,35 +36,50 @@ BOOL CALLBACK DlgProc(HWND hWnd, UINT uMessage, WPARAM wParam, LPARAM lParam)
 	switch (uMessage)
 	{
 	case WM_CLOSE:
-		// Çàêðûâàåì íåìîäàëüíûé äèàëîã.
-		DestroyWindow(hWnd); // ðàçðóøàåì îêíî.
-		PostQuitMessage(0); // îñòàíàâëèâàåì öèêë îáðàáîòêè ñîîáùåíèé.
+		DestroyWindow(hWnd);
+		PostQuitMessage(0);
 		return TRUE;
 	
 	case WM_INITDIALOG:
+		hEditControl_Err = GetDlgItem(hWnd, IDC_STATIC_MessageOfCorrect);
 		return true;
 	case WM_COMMAND:
-		if (LOWORD(wParam) == /* button */){
-			// if
-			// TODO method check empty string
-			// TODO method check date
-			// https://lifehacker.ru/kakoj-den-nedeli/
-			/*
-				method check year!?
-				month
-				day
-			*/
-			// {}
-			// else{ 
-				// data not correct
-			//}
+
+		if (HIWORD(wParam) == EN_CHANGE)
+		{
+			SetWindowText(hEditControl_Err, NULL);
+		}
+
+		if (LOWORD(wParam) == IDC_BUTTON_Identify){
+			if (CheckFieldsCompletion() && CheckingDateForCorrectness())
+			{
+				// ��������� ���� ������
+				// ������� ���� ������.
+			}
+			else
+			{
+				SetWindowText(hEditControl_Err, L"���� �� ���������!");
+			}
 		}
 	
 		return true;
 
 
-
-
 	}
+	return FALSE;
+}
+
+bool CheckFieldsCompletion() {
+
+	return TRUE;
+}
+
+bool CheckingDateForCorrectness() {
+
+	/*
+	method check year!?
+	month
+	day
+	*/
 	return FALSE;
 }
