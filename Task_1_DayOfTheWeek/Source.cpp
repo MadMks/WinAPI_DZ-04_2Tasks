@@ -39,7 +39,7 @@ BOOL CALLBACK DlgProc(HWND hWnd, UINT uMessage, WPARAM wParam, LPARAM lParam)
 		DestroyWindow(hWnd);
 		PostQuitMessage(0);
 		return TRUE;
-	
+
 	case WM_INITDIALOG:
 		hEditControl_Err = GetDlgItem(hWnd, IDC_STATIC_MessageOfCorrect);
 		return true;
@@ -50,18 +50,19 @@ BOOL CALLBACK DlgProc(HWND hWnd, UINT uMessage, WPARAM wParam, LPARAM lParam)
 			SetWindowText(hEditControl_Err, NULL);
 		}
 
-		if (LOWORD(wParam) == IDC_BUTTON_Identify){
+		if (LOWORD(wParam) == IDC_BUTTON_Identify) {
 			if (CheckFieldsCompletion() && CheckingDateForCorrectness())
 			{
 				// высчитать день недели
 				// указать день недели.
+				//
 			}
 			else
 			{
 				SetWindowText(hEditControl_Err, L"Дата не корректна!");
 			}
 		}
-	
+
 		return true;
 
 
