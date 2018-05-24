@@ -49,6 +49,7 @@ BOOL CALLBACK DlgProc(HWND hWnd, UINT uMessage, WPARAM wParam, LPARAM lParam)
 			// if
 			// TODO method check empty string
 			// TODO method check date
+			// https://lifehacker.ru/kakoj-den-nedeli/
 			/*
 				method check year!?
 				month
