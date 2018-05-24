@@ -3,7 +3,7 @@
 #include <vector>
 using namespace std;
 
-// Прототип функции DlgProc.
+// ГЏГ°Г®ГІГ®ГІГЁГЇ ГґГіГ­ГЄГ¶ГЁГЁ DlgProc.
 BOOL CALLBACK DlgProc(HWND, UINT, WPARAM, LPARAM);
 
 
@@ -11,14 +11,14 @@ BOOL CALLBACK DlgProc(HWND, UINT, WPARAM, LPARAM);
 int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrev, LPSTR lpszCmdLine, int nCmdShow)
 {
 
-	MSG msg;	// структура.
-				// создаём главное окно приложения на основе немодального диалога
+	MSG msg;	// Г±ГІГ°ГіГЄГІГіГ°Г .
+				// Г±Г®Г§Г¤Г ВёГ¬ ГЈГ«Г ГўГ­Г®ГҐ Г®ГЄГ­Г® ГЇГ°ГЁГ«Г®Г¦ГҐГ­ГЁГї Г­Г  Г®Г±Г­Г®ГўГҐ Г­ГҐГ¬Г®Г¤Г Г«ГјГ­Г®ГЈГ® Г¤ГЁГ Г«Г®ГЈГ 
 	HWND hDialog = CreateDialog(hInst, MAKEINTRESOURCE(IDD_DIALOG_Main), NULL, DlgProc);
-	// Отображаем окно	
+	// ГЋГІГ®ГЎГ°Г Г¦Г ГҐГ¬ Г®ГЄГ­Г®	
 	ShowWindow(hDialog, nCmdShow);
 
 
-	//Запускаем цикл обработки сообщений
+	//Г‡Г ГЇГіГ±ГЄГ ГҐГ¬ Г¶ГЁГЄГ« Г®ГЎГ°Г ГЎГ®ГІГЄГЁ Г±Г®Г®ГЎГ№ГҐГ­ГЁГ©
 	while (GetMessage(&msg, 0, 0, 0))
 	{
 		TranslateMessage(&msg);
@@ -37,13 +37,30 @@ BOOL CALLBACK DlgProc(HWND hWnd, UINT uMessage, WPARAM wParam, LPARAM lParam)
 	switch (uMessage)
 	{
 	case WM_CLOSE:
-		// Закрываем немодальный диалог.
-		DestroyWindow(hWnd); // разрушаем окно.
-		PostQuitMessage(0); // останавливаем цикл обработки сообщений.
+		// Г‡Г ГЄГ°Г»ГўГ ГҐГ¬ Г­ГҐГ¬Г®Г¤Г Г«ГјГ­Г»Г© Г¤ГЁГ Г«Г®ГЈ.
+		DestroyWindow(hWnd); // Г°Г Г§Г°ГіГёГ ГҐГ¬ Г®ГЄГ­Г®.
+		PostQuitMessage(0); // Г®Г±ГІГ Г­Г ГўГ«ГЁГўГ ГҐГ¬ Г¶ГЁГЄГ« Г®ГЎГ°Г ГЎГ®ГІГЄГЁ Г±Г®Г®ГЎГ№ГҐГ­ГЁГ©.
 		return TRUE;
-
 	
-
+	case WM_INITDIALOG:
+		return true;
+	case WM_COMMAND:
+		if (LOWORD(wParam) == /* button */){
+			// if
+			// TODO method check empty string
+			// TODO method check date
+			/*
+				method check year!?
+				month
+				day
+			*/
+			// {}
+			// else{ 
+				// data not correct
+			//}
+		}
+	
+		return true;
 
 
 
