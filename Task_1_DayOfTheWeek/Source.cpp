@@ -53,13 +53,13 @@ BOOL CALLBACK DlgProc(HWND hWnd, UINT uMessage, WPARAM wParam, LPARAM lParam)
 		if (LOWORD(wParam) == IDC_BUTTON_Identify) {
 			if (CheckFieldsCompletion() && CheckingDateForCorrectness())
 			{
-				// высчитать день недели
-				// указать день недели.
+				// РІС‹СЃС‡РёС‚Р°С‚СЊ РґРµРЅСЊ РЅРµРґРµР»Рё
+				// СѓРєР°Р·Р°С‚СЊ РґРµРЅСЊ РЅРµРґРµР»Рё.
 				//
 			}
 			else
 			{
-				SetWindowText(hEditControl_Err, L"Дата не корректна!");
+				SetWindowText(hEditControl_Err, L"Р”Р°С‚Р° РЅРµ РєРѕСЂСЂРµРєС‚РЅР°!");
 			}
 		}
 
