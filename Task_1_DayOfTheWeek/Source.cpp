@@ -1,16 +1,18 @@
 ﻿#include <windows.h>
 #include <tchar.h>
 #include "resource.h"
-#include <vector>
 using namespace std;
 
 HWND hEditError;
 HWND hEditDay, hEditMonth, hEditYear;
+HWND hDayOfTheWeek;
 
 BOOL CALLBACK DlgProc(HWND, UINT, WPARAM, LPARAM);
 
 bool CheckFieldsCompletion();
 bool CheckingDateForCorrectness(int day, int month, int year);
+int ComputeDayOfTheWeek(int d, int m, int y);
+void ShowDayOfTheWeek(int numberDay);
 
 int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrev, LPSTR lpszCmdLine, int nCmdShow)
 {
@@ -33,8 +35,6 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrev, LPSTR lpszCmdLine, int nCmd
 BOOL CALLBACK DlgProc(HWND hWnd, UINT uMessage, WPARAM wParam, LPARAM lParam)
 {
 
-
-
 	switch (uMessage)
 	{
 	case WM_CLOSE:
@@ -47,6 +47,7 @@ BOOL CALLBACK DlgProc(HWND hWnd, UINT uMessage, WPARAM wParam, LPARAM lParam)
 		hEditDay = GetDlgItem(hWnd, IDC_EDIT_Day);
 		hEditMonth = GetDlgItem(hWnd, IDC_EDIT_Month);
 		hEditYear = GetDlgItem(hWnd, IDC_EDIT_Year);
+		hDayOfTheWeek = GetDlgItem(hWnd, IDC_EDIT_DayOfTheWeek);
 		return TRUE;
 	case WM_COMMAND:
 
@@ -60,22 +61,17 @@ BOOL CALLBACK DlgProc(HWND hWnd, UINT uMessage, WPARAM wParam, LPARAM lParam)
 			TCHAR szTextDay[3];
 			TCHAR szTextMonth[3];
 			TCHAR szTextYear[5];
-			int nDay;
 
 			GetWindowText(hEditDay, szTextDay, 3);
 			GetWindowText(hEditMonth, szTextMonth, 3);
 			GetWindowText(hEditYear, szTextYear, 5);
-			//nDay = _wtoi(text);
-
 
 			if (CheckFieldsCompletion() 
 				&& CheckingDateForCorrectness(_wtoi(szTextDay), _wtoi(szTextMonth), _wtoi(szTextYear)))
 			{
-				// высчитать день недели
-				// указать день недели.
-				//
-				MessageBox(hWnd, L"Дата корректна", L"0",
-					MB_OK | MB_ICONINFORMATION);
+				ShowDayOfTheWeek(
+					ComputeDayOfTheWeek(_wtoi(szTextDay), _wtoi(szTextMonth), _wtoi(szTextYear))
+				);
 			}
 			else
 			{
@@ -133,4 +129,44 @@ bool CheckingDateForCorrectness(int day, int month, int year) {
 	}
 
 	return TRUE;
+}
+
+int ComputeDayOfTheWeek(int day, int month, int year)
+{
+	int a, y, m, R;
+	a = (14 - month) / 12;
+	y = year - a;
+	m = month + 12 * a - 2;
+	R = 7000 + (day + y + y / 4 - y / 100 + y / 400 + (31 * m) / 12);
+	return R % 7;
+}
+
+void ShowDayOfTheWeek(int numberDay) {
+
+	switch (numberDay)
+	{
+	case 0:
+		SetWindowText(hDayOfTheWeek, L"Воскресенье");
+		break;
+	case 1:
+		SetWindowText(hDayOfTheWeek, L"Понедельник");
+		break;
+	case 2:
+		SetWindowText(hDayOfTheWeek, L"Вторник");
+		break;
+	case 3:
+		SetWindowText(hDayOfTheWeek, L"Среда");
+		break;
+	case 4:
+		SetWindowText(hDayOfTheWeek, L"Четверг");
+		break;
+	case 5:
+		SetWindowText(hDayOfTheWeek, L"Пятница");
+		break;
+	case 6:
+		SetWindowText(hDayOfTheWeek, L"Суббота");
+		break;
+	default:
+		break;
+	}
 }
