@@ -6,8 +6,6 @@ using namespace std;
 
 HWND hLeftOperand, hSign, hRightOperand;
 HWND hAnswer;
-// TODO
-HWND hLabel;
 
 BOOL CALLBACK DlgProc(HWND, UINT, WPARAM, LPARAM);
 
@@ -51,9 +49,6 @@ BOOL CALLBACK DlgProc(HWND hWnd, UINT uMessage, WPARAM wParam, LPARAM lParam)
 
 		hAnswer = GetDlgItem(hWnd, IDC_STATIC_Answer);
 
-		// TODO
-		hLabel = GetDlgItem(hWnd, IDC_STATIC_ForResult);
-
 		return TRUE;
 
 	case WM_COMMAND:
@@ -75,9 +70,34 @@ BOOL CALLBACK DlgProc(HWND hWnd, UINT uMessage, WPARAM wParam, LPARAM lParam)
 
 			if (CheckFieldsCompletion() && IsANumericalValue() && IsASignOfValue())
 			{
-				//SetWindowText(hAnswer, L"Вычисления");
-				// TODO
-				//SetWindowText(hLabel, szLeftOperand);
+				TCHAR szAnswer[25];
+				
+				switch (szSign[0])
+				{
+				case '+':
+					_itow(_wtoi(szLeftOperand) + _wtoi(szRightOperand), szAnswer, 10);
+					break;
+				case '-':
+					_itow(_wtoi(szLeftOperand) - _wtoi(szRightOperand), szAnswer, 10);
+					break;
+				case '*':
+					_itow(_wtoi(szLeftOperand) * _wtoi(szRightOperand), szAnswer, 10);
+					break;
+				case '/':
+					if (_wtoi(szRightOperand) == 0)
+					{
+						szAnswer[0] = L'\0';
+						lstrcat(szAnswer, L"На ноль делить нельзя!");
+					}
+					else {
+						_itow(_wtoi(szLeftOperand) / _wtoi(szRightOperand), szAnswer, 10);
+					}
+					break;
+				default:
+					break;
+				}
+
+				SetWindowText(hAnswer,szAnswer);
 			}
 			else
 			{
@@ -85,7 +105,7 @@ BOOL CALLBACK DlgProc(HWND hWnd, UINT uMessage, WPARAM wParam, LPARAM lParam)
 			}
 		}
 
-		return true;
+		return TRUE;
 
 
 	}
