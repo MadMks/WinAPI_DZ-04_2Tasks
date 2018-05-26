@@ -1,14 +1,16 @@
-#include <windows.h>
+﻿#include <windows.h>
+#include <tchar.h>
 #include "resource.h"
 #include <vector>
 using namespace std;
 
-HWND hEditControl_Err;
+HWND hEditError;
+HWND hEditDay, hEditMonth, hEditYear;
 
 BOOL CALLBACK DlgProc(HWND, UINT, WPARAM, LPARAM);
 
 bool CheckFieldsCompletion();
-bool CheckingDateForCorrectness();
+bool CheckingDateForCorrectness(int day, int month, int year);
 
 int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrev, LPSTR lpszCmdLine, int nCmdShow)
 {
@@ -41,25 +43,43 @@ BOOL CALLBACK DlgProc(HWND hWnd, UINT uMessage, WPARAM wParam, LPARAM lParam)
 		return TRUE;
 
 	case WM_INITDIALOG:
-		hEditControl_Err = GetDlgItem(hWnd, IDC_STATIC_MessageOfCorrect);
-		return true;
+		hEditError = GetDlgItem(hWnd, IDC_STATIC_MessageOfCorrect);
+		hEditDay = GetDlgItem(hWnd, IDC_EDIT_Day);
+		hEditMonth = GetDlgItem(hWnd, IDC_EDIT_Month);
+		hEditYear = GetDlgItem(hWnd, IDC_EDIT_Year);
+		return TRUE;
 	case WM_COMMAND:
 
 		if (HIWORD(wParam) == EN_CHANGE)
 		{
-			SetWindowText(hEditControl_Err, NULL);
+			SetWindowText(hEditError, NULL);
 		}
 
 		if (LOWORD(wParam) == IDC_BUTTON_Identify) {
-			if (CheckFieldsCompletion() && CheckingDateForCorrectness())
+
+			TCHAR szTextDay[3];
+			TCHAR szTextMonth[3];
+			TCHAR szTextYear[5];
+			int nDay;
+
+			GetWindowText(hEditDay, szTextDay, 3);
+			GetWindowText(hEditMonth, szTextMonth, 3);
+			GetWindowText(hEditYear, szTextYear, 5);
+			//nDay = _wtoi(text);
+
+
+			if (CheckFieldsCompletion() 
+				&& CheckingDateForCorrectness(_wtoi(szTextDay), _wtoi(szTextMonth), _wtoi(szTextYear)))
 			{
 				// высчитать день недели
 				// указать день недели.
 				//
+				MessageBox(hWnd, L"Дата корректна", L"0",
+					MB_OK | MB_ICONINFORMATION);
 			}
 			else
 			{
-				SetWindowText(hEditControl_Err, L"Дата не корректна!");
+				SetWindowText(hEditError, L"Дата не корректна!");
 			}
 		}
 
@@ -72,15 +92,45 @@ BOOL CALLBACK DlgProc(HWND hWnd, UINT uMessage, WPARAM wParam, LPARAM lParam)
 
 bool CheckFieldsCompletion() {
 
+	TCHAR text[6];
+
+	GetWindowText(hEditDay, text, 3);
+	if (lstrlen(text) == 0) {
+		return FALSE;
+	}
+
+	GetWindowText(hEditMonth, text, 3);
+	if (lstrlen(text) == 0) {
+		return FALSE;
+	}
+
+	GetWindowText(hEditYear, text, 6);
+	if (lstrlen(text) == 0) {
+		return FALSE;
+	}
+	else if (lstrlen(text) < 4 || lstrlen(text) > 4)
+	{
+		return FALSE;
+	}
+
 	return TRUE;
 }
 
-bool CheckingDateForCorrectness() {
+bool CheckingDateForCorrectness(int day, int month, int year) {
 
-	/*
-	method check year!?
-	month
-	day
-	*/
-	return FALSE;
+	int daysInMonth[] = { 0,31,28,31,30,31,30,31,31,30,31,30,31 };
+
+	if (year % 4 == 0) {
+		daysInMonth[2] = 29;
+	}
+
+	if ((month < 1) || (month > 12)) {
+		return false;
+	}
+		
+	if ((day < 1) || (day > daysInMonth[month])) {
+		return false;
+	}
+
+	return TRUE;
 }
